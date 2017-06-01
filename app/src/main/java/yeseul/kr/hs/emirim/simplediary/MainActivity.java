@@ -1,13 +1,17 @@
 package yeseul.kr.hs.emirim.simplediary;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
@@ -24,6 +28,19 @@ public class MainActivity extends AppCompatActivity {
         date = (DatePicker)findViewById(R.id.date_pick);
         edit = (EditText)findViewById(R.id.edit);
         but = (Button)findViewById(R.id.but);
+        but.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try{
+                    FileOutputStream fOut = openFileOutput(fileName, Context.MODE_PRIVATE));
+                    String str = edit.getText().toString();
+                    fOut.write(str.getBytes());
+                    Toast.makeText(MainActivity.this, "정상적으로 " + fileName + "파일이 저장되었습니다.", Toast.LENGTH_LONG).show();
+            } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         Calendar cal = Calendar.getInstance(); //추상클래스이기 때문에 new 연산자로 객체 생성을 못함
         int year = cal.get(Calendar.YEAR);
