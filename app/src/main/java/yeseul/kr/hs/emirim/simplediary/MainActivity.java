@@ -6,6 +6,9 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -37,7 +40,22 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    public String readDiary(String fileName){
-        return null;
+    public String readDiary(String fileName) {
+        String diaryStr = null;
+        FileInputStream fIn = null;
+        try {
+            fIn = openFileInput(fileName);
+            byte[] buf = new byte[500]; //500바이트씩 읽어온다는 의미
+            fIn.read(buf); //IOEception 예외처리가 필요함
+            diaryStr = new String(buf).trim(); //읽어온 Byte값을 String으로 변환하는 방법, trim() 메소드를 사용하면 500Byte보다 적게 입력했을 시 남는 뒷부분의 공백들을 없애줌
+            but.setText("수정 하기");
+        } catch (FileNotFoundException e) {
+            edit.setText("일기가 존재하지 않습니다.");
+            but.setText("새로 저장"); //버튼의 라벨을 "새로 저장"으로 설정
+        } catch (IOException e) { //예외처리
+
+        }
+
+        return diaryStr;
     }
 }
